@@ -20,6 +20,9 @@ app.use(require("./routes/user"));
 app.use(require("./routes/task"));
 app.use(require("./routes/subtask"));
 
+require("./cronjob/updateTaskPriorities");
+require("./cronjob/simulateVoiceCalls");
+
 app.use(notFound);
 app.use(errorHandler);
 

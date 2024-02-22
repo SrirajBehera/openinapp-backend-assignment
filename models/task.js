@@ -77,4 +77,5 @@ mongoose.model("Task", taskSchema);
 
 module.exports = {
   Status,
+  PriorityTask,
 };
