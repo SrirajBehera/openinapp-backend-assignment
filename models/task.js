@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const AutoIncrement = require("mongoose-sequence")(mongoose);
 
+const { ObjectId } = mongoose.Schema.Types;
+
 const Status = {
   TODO: "TODO",
   IN_PROGRESS: "IN_PROGRESS",
@@ -53,6 +55,11 @@ const taskSchema = new mongoose.Schema(
     },
     deleted_at: {
       type: Date,
+    },
+    created_by: {
+      type: ObjectId,
+      ref: "User",
+      required: true,
     },
   },
   { _id: false },

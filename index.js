@@ -16,6 +16,8 @@ db.model("Task");
 require("./models/subtask");
 db.model("Subtask");
 
+app.use(require("./routes/user"));
+
 app.use(notFound);
 app.use(errorHandler);
 

@@ -39,3 +39,7 @@ const userSchema = new mongoose.Schema(
 userSchema.plugin(AutoIncrement, { id: "user_seq", inc_field: "_id" });
 
 mongoose.model("User", userSchema);
+
+module.exports = {
+  Priority,
+};
