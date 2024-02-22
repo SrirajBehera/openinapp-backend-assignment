@@ -1,8 +1,10 @@
+const moment = require("moment");
 const { Priority } = require("./models/user");
+const { Status } = require("./models/task");
 
 const validateCreateUserInput = (phoneNumber, priority) => {
   console.log("validateCreateUserInput", phoneNumber, priority);
-  if (!phoneNumber || priority ) {
+  if (!phoneNumber || priority) {
     return {
       success: false,
       message: "Phone number and priority are required",
@@ -24,7 +26,8 @@ const validateCreateUserInput = (phoneNumber, priority) => {
   if (!validPriorities.includes(priority)) {
     return {
       success: false,
-      message: "Invalid priority value",
+      message:
+        "Invalid priority value. Priority must be one of: HIGH_PRIORITY, MID_PRIORITY, LOW_PRIORITY.",
     };
   }
 
@@ -39,7 +42,15 @@ const validateCreateTaskInput = (title, description, due_date) => {
     };
   }
 
-  // Additional validation logic for due_date format, etc.
+  const parsedDate = moment(due_date, "DD-MM-YYYY").toDate();
+
+  const isValidDate = !isNaN(Date.parse(parsedDate));
+  if (!isValidDate) {
+    return {
+      success: false,
+      message: "Due date must be a valid date",
+    };
+  }
 
   return { success: true };
 };
@@ -55,7 +66,22 @@ const validateCreateSubTaskInput = (task_id) => {
 };
 
 const validateTaskUpdateInput = (due_date, status) => {
-  // Validate due_date format, status values, etc.
+  if (!moment(due_date, "DD-MM-YYYY", true).isValid()) {
+    return {
+      success: false,
+      message:
+        "Invalid due_date format. Please provide a valid date in DD-MM-YYYY format.",
+    };
+  }
+
+  const validStatuses = [Status.TODO, Status.IN_PROGRESS, Status.DONE];
+  if (!validStatuses.includes(status)) {
+    return {
+      success: false,
+      message:
+        "Invalid status value. Status must be one of: TODO, IN_PROGRESS, DONE.",
+    };
+  }
 
   return { success: true };
 };

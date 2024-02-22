@@ -1,8 +1,6 @@
 const mongoose = require("mongoose");
 const AutoIncrement = require("mongoose-sequence")(mongoose);
 
-const { ObjectId } = mongoose.Schema.Types;
-
 const Status = {
   INCOMPLETE: 0,
   COMPLETE: 1,
@@ -14,7 +12,7 @@ const subtaskSchema = new mongoose.Schema(
       type: Number,
     },
     task_id: {
-      type: ObjectId,
+      type: Number,
       ref: "Task",
     },
     status: {

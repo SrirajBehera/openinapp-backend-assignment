@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 
-function verifyToken(req, res, next) {
+const verifyToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -17,6 +18,6 @@ function verifyToken(req, res, next) {
     req.userId = decoded.userId;
     next();
   });
-}
+};
 
 module.exports = verifyToken;

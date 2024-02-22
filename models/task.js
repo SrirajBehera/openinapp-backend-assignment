@@ -1,15 +1,13 @@
 const mongoose = require("mongoose");
 const AutoIncrement = require("mongoose-sequence")(mongoose);
 
-const { ObjectId } = mongoose.Schema.Types;
-
 const Status = {
   TODO: "TODO",
   IN_PROGRESS: "IN_PROGRESS",
   DONE: "DONE",
 };
 
-const Priority = {
+const PriorityTask = {
   PRIORITY_0: 0,
   PRIORITY_1: 1,
   PRIORITY_2: 2,
@@ -33,14 +31,15 @@ const taskSchema = new mongoose.Schema(
       type: String,
       enum: [Status.TODO, Status.IN_PROGRESS, Status.DONE],
       required: true,
+      default: Status.TODO,
     },
     priority: {
       type: Number,
       enum: [
-        Priority.PRIORITY_0,
-        Priority.PRIORITY_1,
-        Priority.PRIORITY_2,
-        Priority.PRIORITY_3,
+        PriorityTask.PRIORITY_0,
+        PriorityTask.PRIORITY_1,
+        PriorityTask.PRIORITY_2,
+        PriorityTask.PRIORITY_3,
       ],
       required: true,
     },
@@ -57,7 +56,7 @@ const taskSchema = new mongoose.Schema(
       type: Date,
     },
     created_by: {
-      type: ObjectId,
+      type: Number,
       ref: "User",
       required: true,
     },
@@ -75,3 +74,7 @@ const taskSchema = new mongoose.Schema(
 taskSchema.plugin(AutoIncrement, { id: "task_seq", inc_field: "_id" });
 
 mongoose.model("Task", taskSchema);
+
+module.exports = {
+  Status,
+};
