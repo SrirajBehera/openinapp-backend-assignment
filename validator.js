@@ -1,6 +1,7 @@
 const moment = require("moment");
 const { Priority } = require("./models/user");
 const { Status } = require("./models/task");
+const { StatusSubTask } = require("./models/subtask");
 
 const validateCreateUserInput = (phoneNumber, priority) => {
   console.log("validateCreateUserInput", phoneNumber, priority);
@@ -60,7 +61,9 @@ const validateCreateSubTaskInput = (task_id) => {
     return { success: false, message: "Task ID is required" };
   }
 
-  // Additional validation logic for task_id format, existence check, etc.
+  if (typeof task_id !== "number" || isNaN(task_id)) {
+    return { success: false, message: "Task ID must be a number" };
+  }
 
   return { success: true };
 };
@@ -87,7 +90,17 @@ const validateTaskUpdateInput = (due_date, status) => {
 };
 
 const validateSubTaskUpdateInput = (status) => {
-  // Validate status values, etc.
+  if (status === undefined || status === null) {
+    return { success: false, message: "Status is required" };
+  }
+
+  if (!Object.values(StatusSubTask).includes(status)) {
+    return {
+      success: false,
+      message:
+        "Invalid status value. Status must be one of: INCOMPLETE, COMPLETE.",
+    };
+  }
 
   return { success: true };
 };

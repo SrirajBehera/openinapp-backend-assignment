@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const AutoIncrement = require("mongoose-sequence")(mongoose);
 
-const Status = {
+const StatusSubTask = {
   INCOMPLETE: 0,
   COMPLETE: 1,
 };
@@ -17,8 +17,9 @@ const subtaskSchema = new mongoose.Schema(
     },
     status: {
       type: Number,
-      enum: [Status.INCOMPLETE, Status.COMPLETE],
+      enum: [StatusSubTask.INCOMPLETE, StatusSubTask.COMPLETE],
       required: true,
+      default: StatusSubTask.INCOMPLETE,
     },
     isDeleted: {
       type: Boolean,
@@ -42,3 +43,6 @@ const subtaskSchema = new mongoose.Schema(
 subtaskSchema.plugin(AutoIncrement, { id: "subtask_seq", inc_field: "_id" });
 
 mongoose.model("Subtask", subtaskSchema);
+module.exports = {
+  StatusSubTask,
+};
