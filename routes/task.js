@@ -9,6 +9,7 @@ const calculatePriority = require("../utils");
 const verifyToken = require("../middlewares/verifyToken");
 const moment = require("moment");
 const Task = mongoose.model("Task");
+const Subtask = mongoose.model("Subtask");
 
 router.post("/api/task", verifyToken, (req, res) => {
   const { title, description, due_date } = req.body;
@@ -95,11 +96,29 @@ router.delete("/api/task/:taskId", verifyToken, async (req, res) => {
       return res.status(404).json({ error: "Task not found" });
     }
 
+    const deletedSubtasks = await Subtask.find({ task_id: task_id });
+    if (deletedSubtasks.length > 0) {
+      await Subtask.updateMany(
+        { task_id: task_id },
+        {
+          $set: {
+            isDeleted: true,
+            deleted_at: new Date(),
+          },
+        }
+      );
+    }
+
     res
       .status(200)
-      .json({ message: "Task soft deleted successfully", task: deletedTask });
+      .json({
+        message: "Task and associated subtasks soft deleted successfully",
+        task: deletedTask,
+      });
   } catch (error) {
-    res.status(500).json({ error: "Could not soft delete task" });
+    res
+      .status(500)
+      .json({ error: "Could not soft delete task and associated subtasks" });
   }
 });
 
